@@ -16,8 +16,8 @@ def fps(prev_frame_time, new_frame_time):
     height = frame.shape[0]
 
 
-    print(width)
-    print(height)
+    #print(width)
+    #print(height)  
 
     new_frame_time = time.time()
     fps = 1/(new_frame_time-prev_frame_time)
@@ -66,14 +66,23 @@ while True:
     lower_green = np.array([36,100,100])
     upper_green = np.array([80,255,255])
     mask = cv.inRange(filter, lower_green, upper_green)
+    contours_green, _ = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    #contour = cv.drawContours(frame, contours_green, -1, (255, 0, 255), 3)
+    for cnt in contours_green:
+        contour_area = cv.contourArea(cnt)
+        if contour_area > 1000:
+            x, y, w, h = cv.boundingRect(cnt)
+            cv.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            cv.putText(frame, 'Caneta', (x, y-10), cv.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
+            center = (x,y)
+            print ((x))
+            movimentarNaLinha = (x)
+            linha(frame, (0, 240), (640, 240), (0,255,0), 3)
+            circulo(frame, (movimentarNaLinha, 240), 20, (255, 0, 0), 2)
+            
 
-    movimentarNaLinha = 10
-    linha(mask, (0, 240), (640, 240), (0,255,0), 3)
-    circulo(mask, (movimentarNaLinha, 240), 20, (255, 0, 0), 2)
-    fps(prev_frame_time, new_frame_time)
 
-
-    cv.imshow('frame', mask)
+    cv.imshow('frame', frame)
 
 
     if cv.waitKey(1) == ord('q'):
