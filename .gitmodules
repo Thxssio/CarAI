@@ -1,0 +1,3 @@
+[submodule "AutonomousCarROS"]
+	path = AutonomousCarROS
+	url = git@github.com:Thxssio/AutonomousCarROS.git
